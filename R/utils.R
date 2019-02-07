@@ -116,7 +116,7 @@ abundance.matrix <- function(data,times=seq(0,data$maxtime,length.out=50),by.age
 #' @import stats
 #' @examples
 #' data(malthusian)
-#' longevity(malthusian)
+#' malthusian.longevity <- longevity(malthusian)
 longevity <- function(data){
     d <- data$data[with(data$data,order(-endtime)),] #orders by endtime, last to first
     ind.life <- function(i){c(i$sp[1],i$id[1],min(i$begintime),i$endtime[1])}
@@ -150,4 +150,21 @@ age.data <- function(data,cap.living=F){
     b <- by(d,d$id,relative)
     data$age.data <- do.call("rbind",b)
 }
+
+# shading by size
+#
+# a structure to add the effect of living under the canopy of bigger lifestages
+#
+# @param param
+shade.smaller <- function(param,effect,unaffected=c(),no.canopy=c()){
+	n<-nrow(param)
+	mat<-matrix(0,n,n)
+	# fill according to size
+	mat[param$radius[col(mat)] < param$radius[row(mat)]] <- effect
+	# remove
+	mat[no.canopy,]<-0
+	mat[,unaffected]<-0
+	mat
+}
+
 

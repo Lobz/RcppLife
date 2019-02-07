@@ -3,10 +3,10 @@
 #include"Random.h"
 #include<cstdio>
 
-Species::Species(Arena *ar,int myid, double *par) : Species(ar,myid,par[0],par[1],par[2],par[3],par[4],par[5],par[6]){}
+Species::Species(Arena *ar,int myid, double *par) : Species(ar,myid,par[0],par[1],par[2],par[3],par[4],par[5],par[6],par[7]){}
 
-Species::Species(Arena *ar,int myid, double death, double growth, double rep=0, double dispersal=0, double radius=0, double maxEf=0, int dkernel=1)
-    :id(myid),D(death),G(growth),R(rep),dispersalRadius(dispersal),Rad(radius),maxStressEffect(maxEf),kernelType(dkernel)
+Species::Species(Arena *ar,int myid, double death, double growth, double rep=0, double dispersal=0, double radius=0, double maxEf=0, int dkernel=1, int rolldown=0)
+    :id(myid),D(death),G(growth),R(rep),dispersalRadius(dispersal),Rad(radius),maxStressEffect(maxEf),kernelType(dkernel),rolldown(rolldown)
 {
     int i;
     nextStage = NULL;
@@ -80,12 +80,19 @@ void Species::disperseIndividual(double x, double y){
 }
 
 void Species::disperseIndividual(Position p){
+    Position newPosition;
     if(kernelType==0){ /* Fully random on the arena */
-        seedStage->addIndividual(Position(Random(arena->getWidth()),Random(arena->getHeight())));
+        newPosition = Position(Random(arena->getWidth()),Random(arena->getHeight()));
     }
     else{
-        seedStage->addIndividual(p + dispersalKernel());
+        newPosition = p + dispersalKernel();
     }
+
+    if(rolldown){
+        newPosition += arena->getSlope(newPosition);
+    }
+
+    seedStage->addIndividual(newPosition);
 }
 
 Position Species::dispersalKernel(){

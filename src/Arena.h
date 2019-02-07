@@ -1,7 +1,7 @@
 #define STRICT_R_HEADERS
 #ifndef ARENA_H
 #define ARENA_H
-#define FACILITATION_NUMPARAMETERS 7
+#define FACILITATION_NUMPARAMETERS 8
 
 #include<list>
 #include<cstdlib>
@@ -35,9 +35,10 @@ class Arena {
 	Species **species;
 	int bcond;
 	History * history;
+	Rcpp::Function slopefunction;
 
 	public:
-	Arena(int numsp, double * baserates, double width, double height, int bcond, double starttime);
+	Arena(int numsp, double * baserates, double width, double height, int bcond, double starttime, Rcpp::Function slopefunction);
 
 	/* high level functions */
 	void createStructuredSpecies(int minId, int maxId);
@@ -54,6 +55,7 @@ class Arena {
 	std::list<Individual*> getPresent(int species_id, Position p);
 	void addAffectedByMe(Individual *ind);
 	double getStressValue(Position p);
+	Position getSlope(Position p);
 
 	Position boundaryCondition(Position p);
 

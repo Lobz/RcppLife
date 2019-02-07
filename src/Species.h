@@ -10,6 +10,7 @@ class Species {
 	double D, G, R, dispersalRadius, Rad, maxStressEffect;
 	int spnum, kernelType;
 	double totalRate;
+	int rolldown;
 
     Arena *arena;
 	std::list<Individual*> population;
@@ -19,7 +20,7 @@ class Species {
 
 	public:
 	Species(Arena *ar,int id, double *par);
-	Species(Arena *ar,int id, double D, double G, double R, double dispersal, double Rad, double maxStressEffect, int dkernel);
+	Species(Arena *ar,int id, double D, double G, double R, double dispersal, double Rad, double maxStressEffect, int dkernel, int rolldown);
 	~Species();
 	/* BASIC RUN ACTION */
 	void act();
